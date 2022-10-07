@@ -1,0 +1,20 @@
+kind: PersistentVolumeClaim
+apiVersion: v1
+metadata:
+  name: prestashop-data-pv-claim ### <<< The name as mentioned above in your Deploymnet
+  namespace: project-ps-dev
+  labels:
+    app: ps-dev
+spec:
+  # The name of the storage class u defined earlier
+  storageClassName: prestashop-data-mysql
+
+  # The access modes are:
+  #   ReadWriteOnce - The volume can be mounted as read-write by a single node
+  #   ReadWriteMany - The volume can be mounted as read-write by a many nodes
+  #   ReadOnlyMany  - The volume can be mounted as read-only  by many nodes
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 5Gi

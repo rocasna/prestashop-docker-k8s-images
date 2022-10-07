@@ -1,0 +1,12 @@
+## CREATE IP RESERVE
+# gcloud compute addresses create project-ip-dev --global
+# 34.110.215.43
+---
+apiVersion: networking.gke.io/v1
+kind: ManagedCertificate
+metadata:
+  name: project-ps-cert-dev
+  namespace: project-ps-dev
+spec:
+  domains:
+    - prestashop.betaroiup.com

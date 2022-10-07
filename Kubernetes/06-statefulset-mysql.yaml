@@ -1,0 +1,60 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: project-mysql-dev
+  namespace: project-ps-dev
+spec:
+  replicas: 1
+  serviceName: project-mysql-dev
+  selector:
+    matchLabels:
+      app: ps-dev
+  template:
+    metadata:
+      labels:
+        app: ps-dev
+    spec:
+      terminationGracePeriodSeconds: 10
+      containers:
+        - name: project-mysql-dev
+          image: mysql:5.7
+          args:
+            - "--ignore-db-dir=lost+found"
+          ports:
+            - name: tcp
+              protocol: TCP
+              containerPort: 3306
+          env:
+          - name: MYSQL_ROOT_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: project-secret-mysql-dev
+                key: MYSQL_ROOT_PASSWORD
+          - name: MYSQL_DATABASE
+            valueFrom:
+              secretKeyRef:
+                name: project-secret-mysql-dev
+                key: MYSQL_DATABASE
+          - name: MYSQL_USER
+            valueFrom:
+              secretKeyRef:
+                name: project-secret-mysql-dev
+                key: MYSQL_USER
+          - name: MYSQL_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: project-secret-mysql-dev
+                key: MYSQL_PASSWORD
+          volumeMounts:
+            - name: project-mysql-volume-dev
+              mountPath: /var/lib/mysql
+  volumeClaimTemplates:
+    - metadata:
+        name: project-mysql-volume-dev
+      spec:
+        storageClassName: prestashop-data-mysql
+        accessModes:
+          - ReadWriteOnce
+        resources:
+          requests:
+            storage: 1Gi

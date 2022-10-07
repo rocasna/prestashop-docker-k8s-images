@@ -1,0 +1,11 @@
+apiVersion: networking.gke.io/v1beta1
+kind: FrontendConfig
+metadata:
+ name: project-frontendconfig-dev
+ namespace: project-ps-dev
+ labels:
+   app: ps-dev
+spec:
+ redirectToHttps:
+   enabled: true
+   responseCodeName: MOVED_PERMANENTLY_DEFAULT

@@ -1,0 +1,40 @@
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: prestashop-dev
+  namespace: project-ps-dev
+spec:
+  selector:
+    matchLabels:
+      app: ps-dev
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: ps-dev
+    spec:
+      containers:
+      - name: nginx-dev
+        image: rcastro95/wp-nginx1.23-dev:v0.1
+        ports:
+        - containerPort: 80
+        volumeMounts:
+            - name: project-data-dev
+              mountPath: "/var/www/html"
+
+
+      - name: php-dev
+        image: rcastro95/wp-php7.4-dev:v0.1
+        ports:
+        - containerPort: 9000
+        volumeMounts:
+            - name: project-data-dev
+              mountPath: "/var/www/html"
+
+
+      volumes:
+          - name: project-data-dev
+            persistentVolumeClaim:
+              claimName: prestashop-data-pv-claim

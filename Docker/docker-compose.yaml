@@ -1,0 +1,41 @@
+
+version: "3"
+
+services:
+
+    nginx-dev:
+      container_name: service-nginx-development
+      build: ./Images/nginx/
+      volumes:
+      - ./Images/php/project:/var/www/html/
+      ports:
+        - "80:80"
+      depends_on:
+        - php-dev
+  
+    php-dev:
+      container_name: service-php-development
+      build: ./Images/php/
+      volumes:
+      - ./Images/php/project:/var/www/html/
+      ports:
+        - "9000:9000"
+      depends_on:
+        - mysql-dev
+    mysql-dev:
+      container_name: service-mysql-development
+      image: mysql:5.7-debian
+      volumes:
+        - db
+      environment:
+        - MYSQL_DATABASE=prestashop
+        - MYSQL_USER=prestashop
+        - MYSQL_PASSWORD=prestashop
+        - MYSQL_ROOT_PASSWORD=Admin.1722
+      ports:
+        - "3306:3306"
+
+      
+volumes:
+  project:
+  
